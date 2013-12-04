@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AppMotoTaxi</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- String Login -->
+    <string name="lbl_login">Login:</string>
+    <string name="lbl_senha">Senha:</string>
+    <string name="lbl_entrar">Entrar</string>
+
+    <!-- criando mensagens utilizadas no APP -->
+    <string name="msg_login_obg">Login Obrigatório</string>
+    <string name="msg_senha_obg">Senha Obrigatória</string>
+
+</resources>
