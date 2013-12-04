@@ -1,13 +1,22 @@
 package br.edu.novaroma.appmototaxi;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import br.edu.novaroma.appmototaxi.bo.LoginBO;
 import br.edu.novaroma.appmototaxi.util.MensagemUtil;
 
 public class LoginActivity extends Activity {
+	
+	private LoginBO loginBO;
 
 	private EditText edtLogin;
 
@@ -24,26 +33,88 @@ public class LoginActivity extends Activity {
 		edtSenha = (EditText) findViewById(R.id.edt_senha);
 	}
 	public void entrar(View view){
-		String login = edtLogin.getText().toString();
-		String senha = edtSenha.getText().toString();
+		new LoadingAsync().execute();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// CRiando um menu
+		 //menu.add(0, 1, 1, "Sair");
+		// menu.add(0, 2, 2, "info");
+		getMenuInflater().inflate(R.menu.login, menu);
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		int idMenuItem = item.getItemId();
+		switch (idMenuItem) {
+		case R.id.menusair:
+			MensagemUtil.addMsgConfirm(LoginActivity.this, getString(R.string.lbl_sair),
+					getString(R.string.msg_logout), R.drawable.logout, new OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+			finish();
+			break;
+		case R.id.menusobre:
+			MensagemUtil.addMsgOk(LoginActivity.this, getString(R.string.lbl_sobre)
+					, getString(R.string.msg_sobre), R.drawable.about);
+			
+		}
+		
+		return true;
+	}
+	
+	@SuppressWarnings("unused")
+	private class LoadingAsync extends AsyncTask<Void, Void, String> {
 
-		boolean dadosValidos = true;
-		if (login == null || login.equals("")) {
-			dadosValidos = false;
-			edtLogin.setError(getString(R.string.msg_login_obg));
+		ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+		
+		@Override
+		protected void onPreExecute() {
+			// abertura do logon 
+			
+			progressDialog.setTitle("Carregando...");
+			progressDialog.show();
+			
 		}
-		if (senha == null || senha.equals("")) {
-			dadosValidos = false;
-			edtLogin.setError(getString(R.string.msg_senha_obg));
-		} 
-		if(dadosValidos){
-		    MensagemUtil.addMsg(LoginActivity.this, "Logon Realizado com Sucesso!");
-		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			//vai executar algo em um plano de fundo thread principall do logar mototaxi
+			
+			String login = edtLogin.getText().toString();
+			String senha = edtSenha.getText().toString();
 
-		if (dadosValidos) {
-			Intent i = new Intent(LoginActivity.this, DashBoardActivity.class);
-			startActivity(i);
+			loginBO = new LoginBO(LoginActivity.this);
+			
+			return loginBO.validarLogin(login, senha);
+			
 		}
+		
+		@Override
+		protected void onPostExecute(String msg) {
+			// executar apos a execucao principal finalizacao do logon e exibicao 
+			//da mensagem de erro ou transferir o mototaxi para a proxima tela 
+			
+			progressDialog.dismiss();
+			
+			if (msg ==null) {
+				Intent i = new Intent(LoginActivity.this, DashBoardActivity.class);
+				startActivity(i);
+				finish();
+			}else {
+				MensagemUtil.addMsg(LoginActivity.this, msg);
+			}
+			
+		}
+		
 	}
 	
 }

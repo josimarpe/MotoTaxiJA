@@ -2,12 +2,16 @@
 <resources>
 
     <string name="app_name">AppMotoTaxi</string>
-    <string name="action_settings">Settings</string>
 
     <!-- String Login -->
     <string name="lbl_login">Login:</string>
     <string name="lbl_senha">Senha:</string>
     <string name="lbl_entrar">Entrar</string>
+    <string name="lbl_sair">Sair</string>
+    <string name="lbl_sobre">Sobre</string>
+    <string name="msg_sobre">Projeto MotoTaxiJA | \nTodos os Direitos reservados ao criador!
+        versao 1.0 disponivel Free por 2 meses</string>
+    <string name="msg_logout">Deseja Realmente Deslogar?</string>
 
     <!-- criando mensagens utilizadas no APP -->
     <string name="msg_login_obg">Login Obrigatório</string>
